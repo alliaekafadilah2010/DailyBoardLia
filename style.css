@@ -1,0 +1,127 @@
+:root {
+  --bg-color: #fdfbf7;
+  --text-color: #2c3e50;
+  --card-bg: #ffffff;
+  --pink-color: #ffb6c1;
+  --lightblue-color: #add8e6;
+  --lightgreen-color: #90ee90;
+  --aquamarine-color: #7fffd4;
+}
+
+body.dark-mode {
+  --bg-color: #1a1a1a;
+  --text-color: #f8f9fa;
+  --card-bg: #2d2d2d;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+ 
+}
+
+#app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+#app > h2:first-child {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--pink-color);
+  margin-bottom: 10px;
+}
+
+.card-modul {
+  background-color: var(--card-bg);
+  border: 2px solid;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-modul h2 {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding-bottom: 8px;
+  color: var(--text-color);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 4px 0 8px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+body.dark-mode input, 
+body.dark-mode textarea {
+  background-color: #343a40;
+  color: #fff;
+  border-color: #495057;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 4px 4px 4px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+li.tugas-item, 
+#daftar-catatan div, 
+#kutipan-harian, 
+#info-cuaca {
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+}
+
+li.tugas-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#kutipan-harian, 
+#info-cuaca {
+  font-style: italic;
+  background-color: #e9ecef;
+}
+
+body.dark-mode li.tugas-item, 
+body.dark-mode #daftar-catatan div, 
+body.dark-mode #kutipan-harian, 
+body.dark-mode #info-cuaca {
+  background-color: #343a40;
+  border-color: #495057;
+  color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+}
