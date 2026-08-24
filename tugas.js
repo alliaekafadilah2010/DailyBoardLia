@@ -8,7 +8,7 @@ function debounce(fn, delay = 300) {
     };
 }
 
-export function setupTugas(state, validasiInput) {
+export function setupTugas(dataPenyimpanan, validasiInput) {
     const tomboltugas = document.getElementById("tombol-tugas");
     const inputTugas = document.getElementById("input-tugas");
     const inputPencarian = document.getElementById("pencarian-tugas");
@@ -16,7 +16,7 @@ export function setupTugas(state, validasiInput) {
     if (tomboltugas) {
         tomboltugas.addEventListener("click", () => {
             if (!validasiInput(inputTugas.value)) return;
-            tambahTugas(inputTugas.value, state);
+            tambahTugas(inputTugas.value, dataPenyimpanan);
             inputTugas.value = "";
             alert("Tugas berhasil ditambahkan!");
         });
@@ -24,51 +24,51 @@ export function setupTugas(state, validasiInput) {
 
     if (inputPencarian) {
         const cariTugasDebounced = debounce((kataKunci) => {
-            renderTugas("semua", kataKunci, state, validasiInput);
+            renderTugas("semua", kataKunci, dataPenyimpanan, validasiInput);
         }, 300);
         
         inputPencarian.addEventListener("input", (e) => {
-            renderTugas("semua", e.target.value, state, validasiInput);
+            renderTugas("semua", e.target.value, dataPenyimpanan, validasiInput);
         });
     }
 
-    renderTugas("semua", "", state, validasiInput);
+    renderTugas("semua", "", dataPenyimpanan, validasiInput);
 }
 
-export function tambahTugas(nama, state) {
-    state.daftarTugas.push({ id: state.nextId++, nama: nama, selesai: false });
-    simpanKeStorage(state.daftarTugas);
-    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", state);
+export function tambahTugas(nama, dataPenyimpanan) {
+    dataPenyimpanan.daftarTugas.push({ id: dataPenyimpanan.nextId++, nama: nama, selesai: false });
+    simpanKeStorage(dataPenyimpanan.daftarTugas);
+    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", dataPenyimpanan);
 }
 
-export function hapusTugas(id, state) {
-    state.daftarTugas = state.daftarTugas.filter((t) => t.id !== id);
-    simpanKeStorage(state.daftarTugas);
-    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", state);
+export function hapusTugas(id, dataPenyimpanan) {
+    dataPenyimpanan.daftarTugas = dataPenyimpanan.daftarTugas.filter((t) => t.id !== id);
+    simpanKeStorage(dataPenyimpanan.daftarTugas);
+    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", dataPenyimpanan);
 }
 
-export function editTugas(id, namaBaru, state) {
-    state.daftarTugas = state.daftarTugas.map((t) =>
+export function editTugas(id, namaBaru, dataPenyimpanan) {
+    dataPenyimpanan.daftarTugas = dataPenyimpanan.daftarTugas.map((t) =>
         t.id === id ? { ...t, nama: namaBaru } : t
     );
-    simpanKeStorage(state.daftarTugas);
-    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", state);
+    simpanKeStorage(dataPenyimpanan.daftarTugas);
+    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", dataPenyimpanan);
 }
 
-export function toggleSelesai(id, state) {
-    state.daftarTugas = state.daftarTugas.map((t) =>
+export function toggleSelesai(id, dataPenyimpanan) {
+    dataPenyimpanan.daftarTugas = dataPenyimpanan.daftarTugas.map((t) =>
         t.id === id ? { ...t, selesai: !t.selesai } : t
     );
-    simpanKeStorage(state.daftarTugas);
-    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", state);
+    simpanKeStorage(dataPenyimpanan.daftarTugas);
+    renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", dataPenyimpanan);
 }
 
-export function renderTugas(filter = "semua", keyword = "", state, validasiInput) {
+export function renderTugas(filter = "semua", keyword = "", dataPenyimpanan, validasiInput) {
   const list = document.getElementById("daftar-tugas");
   if (!list) return;
   list.innerHTML = "";
 
-  const tugasTersaring = state.daftarTugas.filter((t) => {
+  const tugasTersaring = dataPenyimpanan.daftarTugas.filter((t) => {
     const sesuaiFilter = filter === "selesai" ? t.selesai : filter === "belum" ? !t.selesai : true;
     const sesuaiKeyword = t.nama.toLowerCase().includes(keyword.toLowerCase());
     return sesuaiFilter && sesuaiKeyword;
@@ -84,14 +84,14 @@ export function renderTugas(filter = "semua", keyword = "", state, validasiInput
     span.style.textDecoration = tugasItem.selesai ? "line-through" : "none";
     li.style.cursor = "grab";
     li.style.margin = "5px 0";
-    span.addEventListener("click", () => toggleSelesai(tugasItem.id, state));
+    span.addEventListener("click", () => toggleSelesai(tugasItem.id, dataPenyimpanan));
 
     li.appendChild(span);
 
     li.addEventListener("dblclick", () => {
         const tugasBaru = prompt("Masukkan nama baru tugas:", tugasItem.nama);
         if (tugasBaru !== null && validasiInput(tugasBaru)) {
-            editTugas(tugasItem.id, tugasBaru, state);
+            editTugas(tugasItem.id, tugasBaru, dataPenyimpanan);
         }
     });
     
@@ -100,17 +100,17 @@ export function renderTugas(filter = "semua", keyword = "", state, validasiInput
     tombolHapus.style.marginLeft = "10px";
     tombolHapus.addEventListener("click", (e) => {
         e.stopPropagation();
-        hapusTugas(tugasItem.id, state);
+        hapusTugas(tugasItem.id, dataPenyimpanan);
     });
 
     li.appendChild(tombolHapus);
     list.appendChild(li);
   });
 
-  aktifkanDragDrop(state);
+  aktifkanDragDrop(dataPenyimpanan);
 }
 
-function aktifkanDragDrop(state) {
+function aktifkanDragDrop(dataPenyimpanan) {
     const items = document.querySelectorAll('.tugas-item');
     items.forEach(item => {
         item.setAttribute('draggable', true);
@@ -133,15 +133,15 @@ function aktifkanDragDrop(state) {
         const targetId = Number(targetLi.dataset.id);
         if (draggedId === targetId) return;
 
-        const draggedIndex = state.daftarTugas.findIndex(t => t.id === draggedId);
-        const targetIndex = state.daftarTugas.findIndex(t => t.id === targetId);
+        const draggedIndex = dataPenyimpanan.daftarTugas.findIndex(t => t.id === draggedId);
+        const targetIndex = dataPenyimpanan.daftarTugas.findIndex(t => t.id === targetId);
 
         if (draggedIndex > -1 && targetIndex > -1) {
-            const [movedItem] = state.daftarTugas.splice(draggedIndex, 1);
-            state.daftarTugas.splice(targetIndex, 0, movedItem);
+            const [movedItem] = dataPenyimpanan.daftarTugas.splice(draggedIndex, 1);
+            dataPenyimpanan.daftarTugas.splice(targetIndex, 0, movedItem);
             
-            simpanKeStorage(state.daftarTugas);
-            renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", state);
+            simpanKeStorage(dataPenyimpanan.daftarTugas);
+            renderTugas("semua", document.getElementById("pencarian-tugas")?.value || "", dataPenyimpanan);
         }
     });
 }

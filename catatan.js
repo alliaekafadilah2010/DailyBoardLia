@@ -1,46 +1,46 @@
 import { simpanCatatanKeStorage } from "./storage.js";
 
-export function setupCatatan(state, validasiInput) {
-    const btnSimpanCatatan = document.getElementById("btn-simpan-catatan");
-    const textArea = document.getElementById("textarea-catatan");
+export function setupCatatan(dataPenyimpanan, validasiInput) {
+    const tomolSimpanCatatan = document.getElementById("btn-simpan-catatan");
+    const areaText = document.getElementById("textarea-catatan");
 
-    if (btnSimpanCatatan) {
-        btnSimpanCatatan.addEventListener("click", () => {
-            if (textArea.value.trim() === "") return;
-            tambahCatatan(textArea.value, state);
-            textArea.value = "";
+    if (tomolSimpanCatatan) {
+        tomolSimpanCatatan.addEventListener("click", () => {
+            if (areaText.value.trim() === "") return;
+            tambahCatatan(areaText.value, dataPenyimpanan);
+            areaText.value = "";
         });
     }
 
-    renderCatatan(state, validasiInput);
+    renderCatatan(dataPenyimpanan, validasiInput);
 }
 
-function tambahCatatan(isi, state) {
-    state.daftarCatatan.push({ id: Date.now(), isi, tanggal: new Date().toLocaleDateString() });
-    simpanCatatanKeStorage(state.daftarCatatan);
-    renderCatatan(state);
+function tambahCatatan(isi, dataPenyimpanan) {
+    dataPenyimpanan.daftarCatatan.push({ id: Date.now(), isi, tanggal: new Date().toLocaleDateString() });
+    simpanCatatanKeStorage(dataPenyimpanan.daftarCatatan);
+    renderCatatan(dataPenyimpanan);
 }
 
-export function hapusCatatan(id, state) {
-    state.daftarCatatan = state.daftarCatatan.filter((c) => c.id !== id);
-    simpanCatatanKeStorage(state.daftarCatatan);
-    renderCatatan(state);
+export function hapusCatatan(id, dataPenyimpanan) {
+    dataPenyimpanan.daftarCatatan = dataPenyimpanan.daftarCatatan.filter((c) => c.id !== id);
+    simpanCatatanKeStorage(dataPenyimpanan.daftarCatatan);
+    renderCatatan(dataPenyimpanan);
 }
 
-export function editCatatan(id, isiBaru, state) {
-    state.daftarCatatan = state.daftarCatatan.map((c) =>
+export function editCatatan(id, isiBaru, dataPenyimpanan) {
+    dataPenyimpanan.daftarCatatan = dataPenyimpanan.daftarCatatan.map((c) =>
         c.id === id ? { ...c, isi: isiBaru } : c
     );
-    simpanCatatanKeStorage(state.daftarCatatan);
-    renderCatatan(state);
+    simpanCatatanKeStorage(dataPenyimpanan.daftarCatatan);
+    renderCatatan(dataPenyimpanan);
 }
 
-export function renderCatatan(state, validasiInput) {
+export function renderCatatan(dataPenyimpanan, validasiInput) {
     const container = document.getElementById("daftar-catatan");
     if (!container) return;
     container.innerHTML = "";
 
-    state.daftarCatatan.forEach((itemCatatan) => {
+    dataPenyimpanan.daftarCatatan.forEach((itemCatatan) => {
         const div = document.createElement("div");
         div.style.margin = "10px 0";
         div.style.padding = "5px";
@@ -55,7 +55,7 @@ export function renderCatatan(state, validasiInput) {
         p.addEventListener("dblclick", () => {
             const catatanBaru = prompt("Masukkan isi catatan baru:", itemCatatan.isi);
             if (catatanBaru !== null && validasiInput(catatanBaru)) {
-                editCatatan(itemCatatan.id, catatanBaru, state);
+                editCatatan(itemCatatan.id, catatanBaru, dataPenyimpanan);
             }
         });
 
@@ -71,7 +71,7 @@ export function renderCatatan(state, validasiInput) {
         tombolHapusCatatan.style.backgroundColor = "lightcoral";
         
         tombolHapusCatatan.addEventListener("click", () => {
-            hapusCatatan(itemCatatan.id, state);
+            hapusCatatan(itemCatatan.id, dataPenyimpanan);
         });
 
         div.appendChild(p);

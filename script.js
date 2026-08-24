@@ -7,11 +7,11 @@ console.log("Daily Board siap dijalankan!");
 
 const app = document.getElementById("app");
 
-const loadedData = muatDariStorage();
+const dataTersimpan = muatDariStorage();
 const state = {
-    daftarTugas: loadedData.daftarTugas,
-    nextId: loadedData.nextId,
-    daftarCatatan: loadedData.daftarCatatan
+    daftarTugas: dataTersimpan.daftarTugas,
+    nextId: dataTersimpan.nextId,
+    daftarCatatan: dataTersimpan.daftarCatatan
 };
 
 function validasiInput(nilai) {
@@ -26,7 +26,6 @@ function validasiInput(nilai) {
   return true;
 }
 
-// Fungsi pembantu untuk membuat kartu grid
 function buatKartu(judulTeks, warnaBorder) {
     const card = document.createElement("div");
     card.className = "card-modul";
@@ -40,7 +39,6 @@ function buatKartu(judulTeks, warnaBorder) {
     return card;
 }
 
-// 1. Judul Utama Dashboard
 const judul = document.createElement("h2");
 judul.textContent = "Selamat datang di Daily Board!";
 judul.style.gridColumn = "1 / -1";
@@ -48,7 +46,6 @@ judul.style.textAlign = "center";
 app.appendChild(judul);
 
 
-// --- KARTU 1: TUGAS ---
 const kartuTugas = buatKartu("Tugas", "var(--pink-color)");
 
 const inputPencarian = document.createElement("input");
@@ -93,7 +90,6 @@ containerFilter.appendChild(btnBelum);
 kartuTugas.appendChild(containerFilter);
 
 
-// --- KARTU 2: CUACA TERKINI ---
 const kartuCuaca = buatKartu("Cuaca Terkini", "var(--lightblue-color)");
 
 const containerCuaca = document.createElement("div");
@@ -127,7 +123,6 @@ statusEl.style.marginTop = "5px";
 kartuCuaca.appendChild(statusEl);
 
 
-// --- KARTU 3: CATATAN ---
 const kartuCatatan = buatKartu("Catatan", "var(--lightgreen-color)");
 
 const textArea = document.createElement("textarea");
@@ -146,7 +141,6 @@ containerCatatan.id = "daftar-catatan";
 kartuCatatan.appendChild(containerCatatan);
 
 
-// --- KARTU 4: KUTIPAN HARI INI ---
 const kartuKutipan = buatKartu("Kutipan Hari Ini", "var(--aquamarine-color)");
 
 const kutipanEl = document.createElement("div");
@@ -155,17 +149,15 @@ kartuKutipan.appendChild(kutipanEl);
 
 const btnAcakKutipan = document.createElement("button");
 btnAcakKutipan.textContent = "Kutipan Baru";
-btnAcakKutipan.style.marginTop = "5px";
 btnAcakKutipan.style.backgroundColor = "lightyellow";
 btnAcakKutipan.addEventListener("click", () => ambilKutipan());
 kartuKutipan.appendChild(btnAcakKutipan);
 
 
-// --- TOMBOL TEMA (Dibuat rapi di bagian bawah / luar grid lewat CSS) ---
 const toggleTema = document.createElement("button");
 toggleTema.id = "toggle-tema";
 toggleTema.textContent = "Ganti Tema (Dark/Light)";
-toggleTema.style.gridColumn = "1 / -1"; // Agar melebar penuh di bawah grid
+toggleTema.style.gridColumn = "1 / -1"; 
 toggleTema.style.backgroundColor = "#ddd";
 app.appendChild(toggleTema);
 
@@ -175,8 +167,6 @@ toggleTema.addEventListener("click", () => {
     localStorage.setItem("tema", tema);
 });
 
-
-// --- INISIALISASI ---
 window.addEventListener("DOMContentLoaded", () => {
     setupTugas(state, validasiInput);
     setupCatatan(state, validasiInput);
