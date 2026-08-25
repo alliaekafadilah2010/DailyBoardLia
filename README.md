@@ -39,7 +39,7 @@ DailyBoard mampu menyajikan rangkaian kutipan motivasi secara dinamis dari layan
 
 Fitur:
 
-- Mengunduh kutipan secara daring (online)
+- Mengunduh kutipan secara online
 - Memunculkan kutipan secara otomatis tepat saat halaman dibuka
 - Menyediakan tombol interaktif untuk memperbarui kutipan
 - Menghadirkan pesan penanganan eror manakala koneksi API mengalami kendala
